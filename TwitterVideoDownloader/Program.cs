@@ -12,7 +12,7 @@ namespace TwitterVideoDownloader
             string tweetAddress;
             do
             {
-                Console.WriteLine("Enter the tweet address (or type 'exit' to quit):");
+                Console.Write("Enter the tweet address (or type 'exit' to quit):");
                 tweetAddress = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(tweetAddress) || tweetAddress.Equals("exit", StringComparison.OrdinalIgnoreCase))
@@ -49,13 +49,16 @@ namespace TwitterVideoDownloader
             await page.GoToAsync(tweetAdres);
             await page.WaitForTimeoutAsync(5000);
             await browser.CloseAsync();
+            videoList = videoList.Distinct().ToList();
+            Console.WriteLine($"video count: {videoList.Count}");
         }
 
         private static void ProcessVideoLinks()
         {
             foreach (var item in videoList.Distinct())
             {
-                Console.WriteLine(item);
+                Console.WriteLine($"downloading video: {videoList.Count}");
+
                 string ffmpegPath = @"./ffmpeg/ffmpeg";
                 string arguments = $"-i \"{item}\" {Guid.NewGuid().ToString().Replace("-", "")}.mp4";
                 Process.Start(new ProcessStartInfo
